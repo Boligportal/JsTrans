@@ -33,8 +33,7 @@ class JsTrans
     	}
     }
 
-    public function init()
-    {
+    public function init() {
         $assetManager = Yii::app()->assetManager;
 
         // set default language
@@ -53,11 +52,11 @@ class JsTrans
         $this->_publishUrl = $assetManager->getPublishedUrl($this->_assetsPath);
 
         // create hash
-        $hash = substr(md5(implode($this->categories) . ':' . implode($this->languages) ), 0, 10);
+        $hash = substr(md5(implode($this->categories) . ':' . implode($this->languages) . ':' . $this->defaultLanguage ), 0, 10);
         $dictionaryFile = "JsTrans.dictionary.{$hash}.js";
 
         // publish assets and generate dictionary file if neccessary
-        if (!file_exists($this->_publishPath) || YII_DEBUG) {
+        if (!file_exists($this->_publishUrl .'/' . $dictionaryFile) || YII_DEBUG) {
             // publish and get new url and path
             $this->_publishUrl  = $assetManager->publish($this->_assetsPath, false, -1, true);
             $this->_publishPath = $assetManager->getPublishedPath($this->_assetsPath);
@@ -68,7 +67,7 @@ class JsTrans
             // getting protected loadMessages method using Reflection to call it from outside
             $messages = Yii::app()->messages;
             $loadMessages = new ReflectionMethod(get_class($messages), 'loadMessages');
-			$loadMessages->setAccessible(true);
+			      $loadMessages->setAccessible(true);
 
             // loop message files and store translations in array
             $dictionary = array();
