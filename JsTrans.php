@@ -59,7 +59,9 @@ class JsTrans
         // publish assets and generate dictionary file if neccessary
         if (!file_exists($this->_publishPath) || YII_DEBUG) {
             // publish and get new url and path
-            $this->_publishUrl  = $assetManager->publish($this->_assetsPath, false, -1);
+            $assetsManager = Yii::app()->getAssetManager();
+            $forceCopy = empty($assetsManager) || !$assetsManager->linkAssets ? true : false;
+            $this->_publishUrl  = $assetManager->publish($this->_assetsPath, false, -1, $forceCopy);
             $this->_publishPath = $assetManager->getPublishedPath($this->_assetsPath);
 
             // declare config (passed to JS)
