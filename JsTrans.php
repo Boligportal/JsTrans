@@ -92,13 +92,10 @@ class JsTrans
             }
         }
 
-        $jsTransFile = YII_DEBUG ? 'JsTrans.min.js' : 'JsTrans.js';
-
         Yii::app()->getClientScript()->addPackage('JsTrans', [
             'baseUrl' => $this->_publishUrl,
-            'js' => [$jsTransFile, $dictionaryFile],
+            'js' => ['JsTrans.min.js', $dictionaryFile],
         ]);
-
         Yii::app()->getClientScript()->registerPackage('JsTrans');
 
     }
