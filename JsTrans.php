@@ -47,7 +47,7 @@ class JsTrans
         if (!is_array($this->languages)) $this->languages = array($this->languages);
 
         // set paths
-        $this->_assetsPath = dirname(__FILE__) . '/assets';
+        $this->_assetsPath = $assetManager->basePath;
         $this->_publishPath = $assetManager->getPublishedPath($this->_assetsPath);
         $this->_publishUrl = $assetManager->getPublishedUrl($this->_assetsPath);
 
@@ -58,8 +58,7 @@ class JsTrans
         // publish assets and generate dictionary file if neccessary
         if (!file_exists($this->_publishUrl .'/' . $dictionaryFile) || YII_DEBUG) {
             // publish and get new url and path
-            $assetsManager = Yii::app()->getAssetManager();
-            $forceCopy = empty($assetsManager) || !$assetsManager->linkAssets ? true : false;
+            $forceCopy = !$assetManager->linkAssets ? true : false;
             $this->_publishUrl  = $assetManager->publish($this->_assetsPath, false, -1, $forceCopy);
             $this->_publishPath = $assetManager->getPublishedPath($this->_assetsPath);
 
