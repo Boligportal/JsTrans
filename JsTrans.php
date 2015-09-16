@@ -34,7 +34,10 @@ class JsTrans
     }
 
     public function init() {
-        $assetManager = Yii::app()->assetManager;
+        $assetManager = clone Yii::app()->assetManager;
+        if(isset($assetManager->linkAssets) && true === $assetManager->linkAssets) {
+          $assetManager->linkAssets = false;
+        }
 
         // set default language
         if (!$this->defaultLanguage) $this->defaultLanguage = Yii::app()->language;
@@ -56,11 +59,9 @@ class JsTrans
         $dictionaryFile = "JsTrans.dictionary.{$hash}.js";
 
         // publish assets and generate dictionary file if neccessary
-        if (!file_exists($this->_publishUrl .'/' . $dictionaryFile) || YII_DEBUG) {
+        if (!file_exists($this->_publishUrl .'/' . $dictionaryFile)) {
             // publish and get new url and path
-            $assetsManager = Yii::app()->getAssetManager();
-            $forceCopy = empty($assetsManager) || !$assetsManager->linkAssets ? true : false;
-            $this->_publishUrl  = $assetManager->publish($this->_assetsPath, false, -1, $forceCopy);
+            $this->_publishUrl  = $assetManager->publish($this->_assetsPath, false, -1);
             $this->_publishPath = $assetManager->getPublishedPath($this->_assetsPath);
 
             // declare config (passed to JS)
